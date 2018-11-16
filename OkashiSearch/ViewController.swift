@@ -8,11 +8,15 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, UISearchBarDelegate{
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        
+//        searBarのdelegaten通知先を設定
+        searchText.delegate = self
+        
+        searchText.placeholder = "お菓子の名前を入力してください！"
     }
 
     @IBOutlet weak var searchText: UISearchBar!
