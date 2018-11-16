@@ -23,5 +23,16 @@ class ViewController: UIViewController, UISearchBarDelegate{
     @IBOutlet weak var tableView: UITableView!
     
     
+//    検索ボタンをクリックした時
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        
+//        キーボードを閉じる
+        view.endEditing(true)
+        
+        if let searchword = searchBar.text {
+//            デバッグエリアに入力文字を出力
+            print(searchword)
+        }
+    }
 }
 
