@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ViewController: UIViewController, UISearchBarDelegate{
+class ViewController: UIViewController, UISearchBarDelegate, UITableViewDataSource {
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -17,6 +17,9 @@ class ViewController: UIViewController, UISearchBarDelegate{
         searchText.delegate = self
         
         searchText.placeholder = "お菓子の名前を入力してください！"
+        
+//        tableViewのdataSourceを設定
+        tableView.dataSource = self
     }
 
     @IBOutlet weak var searchText: UISearchBar!
@@ -102,6 +105,8 @@ class ViewController: UIViewController, UISearchBarDelegate{
 //                お菓子の情報が取得できているか確認
                 if let items = json.item {
                     
+//                    お菓子リストの初期化
+                    self.okashiList.removeAll()
 //                    取得しているお菓子の数だけ処理
                     for item in items {
                         
@@ -115,6 +120,8 @@ class ViewController: UIViewController, UISearchBarDelegate{
                             self.okashiList.append(okashi)
                         }
                     }
+//                    Table Viewを更新する
+                    self.tableView.reloadData()
                     
                     if let okashidbg = self.okashiList.first {
                         print("----------------------------")
@@ -130,5 +137,28 @@ class ViewController: UIViewController, UISearchBarDelegate{
 //        ダウンロード開始
         task.resume()
     }
+    
+//    Cellの総数を返すdataSourceメソッド、必ず記述する必要がある
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+//        お菓子リストの総数
+        return okashiList.count
+    }
+    
+//    Cellに値を設定するdataSourceメソッド、必ず記述する必要がある
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+//        今回表示を行う。Cellオブジェクト（１行）を取得する
+        let cell = tableView.dequeueReusableCell(withIdentifier: "okashiCell", for: indexPath)
+//        お菓子のタイトル設定
+        cell.textLabel?.text = okashiList[indexPath.row].name
+//        お菓子の画像取得
+        if let imageData = try? Data(contentsOf: okashiList[indexPath.row].image) {
+//            正常に取得できた場合は、UIImageで画像オブジェクトを生成して、Cellんにお菓子画像を設定
+            cell.imageView?.image = UIImage(data: imageData)
+        }
+//        設定済みのCellオブジェクトを画像に反映
+        return cell
+    }
+    
 }
 
