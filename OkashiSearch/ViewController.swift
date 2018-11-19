@@ -32,7 +32,25 @@ class ViewController: UIViewController, UISearchBarDelegate{
         if let searchword = searchBar.text {
 //            デバッグエリアに入力文字を出力
             print(searchword)
+            
+//            入力されていたら、お菓子を検索
+            searchOkashi(keyword: searchword)
         }
+    }
+    
+//    第一引数：keyword 検索したいキーワード
+    func searchOkashi(keyword: String) {
+        
+//        お菓子の検索キーワードをURLエンコードする
+        guard let keyword_encode = keyword.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else {
+            return
+        }
+        
+//        リクエストURLの組み立て
+        guard let req_url = URL(string: "http://www.sysbirb.jp/toriko/aip/?apikey=guest&format=json&keyword=\(keyword_encode)&max=10&order=r") else {
+            return
+        }
+        print(req_url)
     }
 }
 
